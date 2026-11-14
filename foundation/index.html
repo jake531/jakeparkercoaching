@@ -110,12 +110,34 @@ function trainingRec(){
  }else{
    copy='You have room for 4 days, and your answers suggest a fairly steady routine. The next question is how those sessions are organized around muscle growth.';
  }
- if(days===4)copy+=' I recommend an upper/lower split so each major muscle group gets trained twice a week.';
+ if(days===4 && available!==5)copy+=' I recommend an upper/lower split so each major muscle group gets trained twice a week.';
  if(days===3)copy+=' Three full-body workouts are your best starting structure because they let you train each major muscle group multiple times each week without needing to be in the gym every day.';
  if(days===2)copy+=' Two full-body workouts are your best starting structure for making the most of those two days.';
  return {days,title,copy};
 }
-function nutritionRec(){const n=result.scores.nutrition,tracking=answers.n2;if(n<=1)return {title:'Understand what you eat now',copy:'For a short period, try recording what you normally eat. Don’t rush to cut food yet. First, get a clear picture of your usual intake.'};if(tracking===3)return {title:'Give your tracking a purpose',copy:'You already record your food. The next step is checking if you have targets that match your goal, instead of collecting numbers without a clear direction.'};if(n<=3)return {title:'Make your eating more repeatable',copy:'You have some food habits in place. Your next step is understanding how much you normally eat and keeping a pattern you can repeat.'};return {title:'Check if your macros match your goal',copy:'You already track toward specific macros. Now check your body weight and training trends to see if those targets are getting you closer to your goal.'}}
+function nutritionRec(){
+ const n=result.scores.nutrition, tracking=answers.n2, goal=answers.goal;
+ const goalContext=[
+   'For your fat-loss goal, the amount you eat matters. Once you know your baseline, you can decide if a modest calorie deficit makes sense while keeping resistance training in place.',
+   'For building muscle, look for enough food to support hard training and recovery. You do not need to rush into a large calorie surplus.',
+   'For losing belly fat while building muscle, your starting point matters. Do not automatically cut calories aggressively; first look at your usual intake and changes in strength, body weight and physique.',
+   'You are still choosing your main physique goal. Understanding your current intake gives you useful information without committing to a calorie target too early.'
+ ][goal] || 'Start by understanding your normal intake before making major changes.';
+ if(n<=1)return {title:'Understand what you eat now',copy:'Record what you normally eat for a short period so you can see your portions and patterns. '+goalContext};
+ if(tracking===3)return {title:'Give your tracking a purpose',copy:[
+   'You already record food. Next, establish an appropriate calorie target for fat loss and follow your body-weight trend over several weeks while keeping protein and lifting consistent.',
+   'You already record food. Next, set a reasonable intake that supports training, and watch strength and body-weight trends rather than assuming you need to eat much more.',
+   'You already record food. Instead of choosing a large deficit or surplus automatically, use your baseline, training performance and physique trends to decide which direction fits your starting point.',
+   'You already record food. Choose the physique change you care about most before setting calorie or macro targets.'
+ ][goal]};
+ if(n<=3)return {title:'Make your eating more repeatable',copy:'Build meals and portions you can repeat, then monitor your intake consistently enough to make an informed change. '+goalContext};
+ return {title:'Check if your macros match your goal',copy:[
+   'You already track toward macro targets. Check your average body-weight trend over several weeks and your gym performance. If fat loss has stalled, review your actual intake before making a small adjustment.',
+   'You already track macros. Look at strength progression, recovery and your body-weight trend. If training is productive, avoid increasing calories just for the sake of gaining weight faster.',
+   'You already track macros. Review body-weight, strength and physique trends together rather than judging success by scale weight alone. The right calorie direction depends on where you are starting.',
+   'You already track macros. First clarify if you want to prioritize muscle growth, fat loss or maintaining your weight, then assess if your current targets support that outcome.'
+ ][goal]};
+}
 function focusRec(){return {consistency:['Build a routine you can repeat','Make your planned sessions happen consistently before looking for another workout.'],execution:['Track your workouts','Write down your exercises, weights, and reps. Pay attention to how challenging each exercise feels.'],nutrition:['Get a clear food baseline','Pay attention to your typical meals and portions before deciding to eat less or more.'],advanced:['Review the whole plan','You have the basics in place. Now look at how well your training and food actually support your goal.']}[result.priority]}
 function goalRec(){
  const goals=[
