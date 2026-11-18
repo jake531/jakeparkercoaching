@@ -1,0 +1,309 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Physique Plateau Diagnostic</title><style>
+:root{--bg:#171717;--panel:#212221;--panel2:#292b28;--stroke:#41433e;--text:#f6f6f2;--muted:#b8bcb5;--sage:#9aa881;--light:#d7ddce}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button{font:inherit;cursor:pointer}.shell{max-width:800px;margin:auto;min-height:100vh;padding:22px 22px 65px}.top{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--stroke);padding-bottom:14px}.brand{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.counter,.hint,.fine{font-size:13px;color:var(--muted)}.bar{height:4px;background:#373b35;margin:13px 0 28px;border-radius:10px;overflow:hidden}.bar>div{height:100%;background:var(--sage);transition:width .2s}.page{display:none}.page.active{display:block}.kicker{font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--sage);text-transform:uppercase;margin-top:25px}h1{font-size:clamp(38px,7vw,66px);letter-spacing:-.05em;line-height:1.06;margin:13px 0 18px}h2{font-size:clamp(29px,5vw,44px);letter-spacing:-.045em;line-height:1.13;margin:12px 0 18px}h3{margin:0 0 10px;font-size:21px}.lead{font-size:clamp(16px,2.5vw,20px);color:var(--muted)}.reasons,.options{display:grid;gap:10px;margin:23px 0}.reason,.opt,.card,.column{background:var(--panel);border:1px solid var(--stroke);border-radius:12px}.reason button{width:100%;padding:16px 18px;text-align:left;border:0;background:transparent;color:var(--text);font-weight:650;display:flex;justify-content:space-between;gap:12px}.reason .why{display:none;padding:0 18px 16px;color:var(--muted);font-size:14px}.reason.open .why{display:block}.plus{color:var(--sage)}.columns{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:22px}.column{padding:18px}.column h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--sage)}.column p{margin:10px 0;color:var(--light);font-size:14px}.quote{border-left:3px solid var(--sage);padding:9px 0 9px 17px;font-size:clamp(19px,3vw,25px);font-weight:650;margin:26px 0}.buttons{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin:28px 0 10px}.btn{padding:13px 19px;background:var(--sage);border:1px solid var(--sage);border-radius:10px;font-weight:700;color:#171917}.btn.secondary{background:transparent;color:var(--light);border-color:var(--stroke)}.btn:disabled{opacity:.35}.opt{width:100%;padding:17px 19px;color:var(--text);text-align:left;display:flex;gap:13px;align-items:center;min-height:62px}.opt.selected{border-color:var(--sage);background:#30372b}.dot{border:2px solid #80877b;border-radius:50%;width:19px;height:19px;flex:none}.opt.selected .dot{border-color:var(--sage);background:var(--sage);box-shadow:inset 0 0 0 4px #30372b}.card{padding:23px;margin:20px 0}.audit-row{padding:24px 0;border-bottom:1px solid var(--stroke)}.audit-row:last-child{border:0}.audit-head{display:flex;justify-content:space-between;gap:12px}.audit-head strong{font-size:19px}.status{font-size:12px;color:var(--light)}.meter{height:16px;background:#393e36;border-radius:100px;overflow:hidden;margin:13px 0 14px}.meter-fill{height:100%;background:linear-gradient(90deg,#748861,var(--sage));border-radius:100px}.audit-info{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.audit-info b,.kv label{display:block;color:var(--sage);text-transform:uppercase;letter-spacing:.09em;font-size:11px;margin-bottom:7px}.audit-info p,.kv p{margin:0;color:var(--muted);font-size:14px}.result{background:#293026;border:1px solid #59664f;border-radius:13px;padding:22px;margin:22px 0}.result .tag{color:var(--sage);font-weight:800;font-size:11px;letter-spacing:.13em;text-transform:uppercase}.result h3{font-size:27px;margin-top:10px}.kv{border-bottom:1px solid var(--stroke);padding:14px 0}.kv:last-child{border:0}.kv strong{font-size:20px}.message{white-space:pre-wrap;background:var(--panel);border:1px solid var(--stroke);padding:16px;border-radius:12px;color:var(--light);font-size:14px}.feedback{min-height:22px;color:var(--sage);font-size:13px}.footer{border-top:1px solid var(--stroke);padding-top:16px;margin-top:45px;color:#969b92;font-size:11px}.preview{font-size:11px;background:#293026;color:#d7ddce;border:1px solid #59664f;border-radius:6px;padding:3px 7px;white-space:nowrap}@media(max-width:600px){.shell{padding:17px 16px 52px}.columns,.audit-info{grid-template-columns:1fr}.card{padding:18px}.btn{padding:12px 14px;font-size:14px}}
+
+/* Richer but restrained accents for the working preview */
+:root{--mint:#b9d3b3;--warm:#d6c6a2}
+.bar>div{background:linear-gradient(90deg,#7d936e 0%,#9fb69a 55%,#d6c6a2 100%)}
+.kicker{color:#b8caa8}
+.reason{transition:border-color .22s ease,background .22s ease}
+.reason:hover,.reason.open{border-color:#728369;background:linear-gradient(125deg,#252b25,#212221)}
+.plus{color:#c8d5af}
+.opt{transition:border-color .18s ease,background .18s ease,transform .18s ease}
+.opt:hover{border-color:#8b9f7c;transform:translateY(-1px)}
+.opt.selected{border-color:#a9b995;background:linear-gradient(120deg,#303a2f,#30352d)}
+.result{background:linear-gradient(135deg,#2b382a 0%,#282f27 55%,#333226 100%);border-color:#66765c}
+.quote{border-image:linear-gradient(180deg,#b4c7a4,#bcae8d) 1}
+.meter-fill{background:linear-gradient(90deg,#718765,#a9bfa1,#cfbf9e)}
+.btn:not(.secondary):not(:disabled){
+ position:relative;overflow:hidden;isolation:isolate;
+ color:#172015;border:1px solid #bfd2aa;
+ background:linear-gradient(115deg,#839c77 0%,#b8caa2 28%,#e0d0a9 51%,#aec99f 73%,#8ca47d 100%);
+ background-size:240% 100%;
+ animation:button-breathe 4.8s ease-in-out infinite;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 4px 16px rgba(154,168,129,.19);
+ transition:box-shadow .2s ease,transform .2s ease;
+}
+.btn:not(.secondary):not(:disabled)::after{
+ content:"";position:absolute;z-index:2;pointer-events:none;
+ top:-40%;bottom:-40%;left:-75%;width:34%;
+ transform:skewX(-22deg);
+ background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.07) 18%,rgba(255,255,255,.58) 48%,rgba(255,255,255,.12) 76%,transparent 100%);
+ filter:blur(1px);
+ animation:button-sheen 3.1s ease-in-out infinite;
+}
+.btn:not(.secondary):not(:disabled):hover{transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 23px rgba(154,168,129,.30)}
+@keyframes button-sheen{0%,12%{left:-75%}48%,100%{left:145%}}
+@keyframes button-breathe{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@media(prefers-reduced-motion:reduce){
+ .btn:not(.secondary):not(:disabled),.btn:not(.secondary):not(:disabled)::after{animation:none}
+ .opt{transition:none}
+}
+
+:root{--amber:#ce8953;--warm:#f0be81;--green:#9aa881}
+.shell{max-width:880px}.lead{max-width:730px}
+.brand{font-size:12px}.micro{font-size:11px;color:var(--muted);letter-spacing:.06em}
+.hero-mark{margin:25px 0;padding:18px 20px;border:1px solid #465046;border-radius:15px;background:linear-gradient(135deg,#29312a,#242525);display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.hero-mark span{display:block;font-size:12px;color:#d4d8cd}.hero-mark strong{color:var(--warm);font-size:13px}
+.insight-list{display:grid;gap:10px;margin:23px 0}.insight{padding:17px 19px;border:1px solid #444c42;background:#252a25;border-radius:13px}.insight b{color:#b7cbaa}.insight p{font-size:14px;color:var(--muted);margin:6px 0 0}
+.diagnostic-stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:25px;margin:25px 0 12px}
+.orbit-box{position:relative;max-width:410px;width:100%;aspect-ratio:1;margin:auto;background:radial-gradient(circle at center,rgba(81,96,74,.18),rgba(32,36,32,.08) 56%,transparent 72%);border-radius:50%}
+.orbit-box svg{width:100%;height:100%;overflow:visible}
+.sector{cursor:pointer;outline:none;transition:filter .25s ease,transform .35s ease;transform-origin:200px 200px}.sector:hover,.sector:focus-visible{filter:brightness(1.35)}.sector path{transition:fill .3s ease,stroke .3s ease}.orbit-sweep{transform-origin:200px 200px;animation:orbit 18s linear infinite;pointer-events:none}.halo{animation:halo 2.6s ease-in-out infinite;pointer-events:none}
+@keyframes orbit{to{transform:rotate(360deg)}}@keyframes halo{50%{opacity:.3;transform:scale(1.025)}}
+@media(prefers-reduced-motion:reduce){.orbit-sweep,.halo{animation:none}}
+.orbit-note{color:var(--muted);font-size:12px;text-align:center;margin:0 0 12px}
+.signal-column{display:grid;gap:11px}.signal-line{padding:15px 16px;border-radius:12px;background:#252a25;border:1px solid #474e44;cursor:pointer;text-align:left;width:100%;color:var(--text)}.signal-line strong{display:block;font-size:16px}.signal-line small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.signal-line.selected{border-color:#cc945f;background:linear-gradient(100deg,#392d23,#2d3029)}.signal-line .rank{color:var(--warm);font-weight:800;font-size:11px;letter-spacing:.1em}
+.diagnosis-panel{background:linear-gradient(130deg,#302c27,#282e27);border:1px solid #7b705a;border-radius:15px;padding:23px;margin:20px 0}.diagnosis-panel h3{font-size:clamp(25px,4vw,32px);line-height:1.14}.diagnosis-panel p{color:#c6c9c1}
+.two-step{display:grid;gap:14px}.step-card{padding:20px 22px;background:#242824;border:1px solid #464e43;border-radius:14px}.step-card .number{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--warm)}.step-card h3{margin:8px 0}.step-card p{color:var(--muted);font-size:15px;margin:0}.step-card ol{margin:8px 0 0;padding-left:20px;color:var(--light)}.step-card li{padding:3px 0;font-size:15px}
+.btn:not(.secondary):not(:disabled){background:linear-gradient(105deg,#9aa881,#c1cda6,#b3aa7d,#9aa881);background-size:230% 100%;animation:button-breathe 5s ease-in-out infinite}
+.btn:not(.secondary):not(:disabled)::after{z-index:1}.btn:not(.secondary):not(:disabled){isolation:isolate}
+@media(max-width:640px){.diagnostic-stage{grid-template-columns:1fr;gap:10px}.orbit-box{max-width:330px}.hero-mark{grid-template-columns:1fr;gap:13px}.step-card{padding:17px}}
+
+/* Strong visual hierarchy: the main diagnostic is always unmistakable. */
+.signal-column{gap:10px}
+.signal-line{position:relative;transition:transform .2s ease,box-shadow .2s ease,opacity .2s ease}
+.signal-line.primary{padding:23px 21px 22px;border:2px solid #e7ad70;background:linear-gradient(118deg,#513726,#382e27 65%,#30342a);box-shadow:0 9px 32px rgba(192,111,54,.18), inset 0 1px rgba(255,219,166,.16)}
+.signal-line.primary strong{font-size:21px;line-height:1.2;color:#f8e7d1}
+.signal-line.primary .rank{font-size:12px;color:#ffcb8c}
+.signal-line.primary small{font-size:13px;color:#ebd5bc;margin-top:7px}
+.signal-line.primary::after{content:'01';position:absolute;right:17px;top:13px;font-size:36px;font-weight:800;letter-spacing:-.07em;color:rgba(255,199,130,.17)}
+.signal-line.secondary-rank{padding:13px 15px;background:#252a25;border-color:#464d43}
+.signal-line.secondary-rank strong{font-size:15px;color:#d2d9ce}
+.signal-line.secondary-rank .rank{font-size:10px;color:#9fae99}
+.signal-line.secondary-rank small{font-size:11px}
+.signal-line.secondary-rank.selected{border-color:#a5b398;box-shadow:0 0 0 1px #809378}
+.signal-line.primary:not(.selected){opacity:1}
+.diagnosis-panel{border-color:#c28e5c;background:linear-gradient(125deg,#3a3028,#2b3028);box-shadow:0 10px 28px rgba(0,0,0,.1)}
+.diagnosis-panel .tag{color:#f1be83}
+.orbit-box{filter:drop-shadow(0 0 16px rgba(183,116,65,.14))}
+.sector.is-primary{filter:drop-shadow(0 0 13px rgba(229,139,69,.65))}
+.sector.is-primary path{stroke-width:4.5}
+.sector.is-secondary{opacity:.60}
+.sector.is-secondary.is-inspected{opacity:1;filter:brightness(1.12)}
+.orbit-focus-badge{color:#eec391;font-size:11px;font-weight:750;text-align:center;margin:2px 0 0}
+@media(max-width:640px){.signal-line.primary{padding:19px}.signal-line.primary strong{font-size:20px}}
+
+/* V8: prioritization by segment size and consistent warm accents through the finish. */
+.orbit-focus-badge{color:#c1c9ba;font-size:11px;font-weight:550}
+#actions .step-card:first-child{border-color:#cf975e;background:linear-gradient(115deg,#3b3028,#282b26);box-shadow:0 5px 26px rgba(176,110,56,.10)}
+#actions .step-card:last-child{border-color:#bd8757;background:linear-gradient(125deg,#322d26,#252b25)}
+#actions .step-card .number{color:#e9b779}
+#actions .step-card ol li::marker{color:#e1ab75;font-weight:800}
+#final .message{border-color:#be8e5b;background:linear-gradient(120deg,#332f27,#252b25);box-shadow:inset 3px 0 #dea16d}
+#final .kicker{color:#e4b47d}
+#final .lead{max-width:none;width:100%;font-size:clamp(16px,2.6vw,20px);line-height:1.48;margin-bottom:16px}
+.signal-line.selected-neutral{border-color:#83967b;background:linear-gradient(100deg,#293a2d,#2d332c)}
+
+/* Intro video section; video source will be supplied after recording. */
+.personal-intro{margin:24px 0 22px;border:1px solid #465243;border-radius:16px;overflow:hidden;background:#20251f;box-shadow:0 14px 42px rgba(0,0,0,.14)}
+.personal-intro .personal-intro-label{padding:14px 18px 0;color:#c5d0bb;font-size:12px;line-height:1.4;font-weight:800;letter-spacing:.085em;text-transform:uppercase}
+.personal-intro .personal-intro-frame{position:relative;aspect-ratio:16/9;margin:11px 13px 0;border:1px solid #6e7d69;border-radius:11px;background:radial-gradient(circle at 72% 25%,rgba(154,168,129,.20),transparent 45%),linear-gradient(135deg,#253027,#151c17 75%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px;text-align:center}
+.personal-intro .personal-intro-symbol{display:grid;place-items:center;height:54px;width:54px;border:2px solid #d8a674;border-radius:50%;color:#e4b886;background:#332a21;font-size:26px;line-height:1}
+.personal-intro .personal-intro-frame strong{font-size:18px;line-height:1.2;color:#f1eee6}
+.personal-intro .personal-intro-frame small{font-size:13px;color:#c4cbbf;max-width:300px;line-height:1.4}
+.personal-intro .personal-intro-footer{padding:13px 18px 15px;font-size:13px;line-height:1.5;color:#d1d6ca}
+.personal-intro video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#111;}
+.personal-intro .personal-intro-embed{position:relative;aspect-ratio:16/9;margin:11px 13px 0;border:1px solid #6e7d69;border-radius:11px;overflow:hidden;background:#111}
+.personal-intro .personal-intro-embed iframe{display:block;width:100%;height:100%;border:0}
+@media(max-width:520px){.personal-intro{margin:19px 0}.personal-intro .personal-intro-frame{aspect-ratio:4/3}.personal-intro .personal-intro-frame strong{font-size:16px}.personal-intro .personal-intro-label{font-size:11px}.personal-intro .personal-intro-footer{font-size:12px}}
+
+/* Result typography and concise, numbered next steps */
+.signal-column{gap:13px}
+.signal-line.primary strong{font-size:clamp(22px,3.3vw,27px)}
+.signal-line.primary small{font-size:clamp(16px,2.3vw,18px);line-height:1.45;color:#f0dfcd;margin-top:10px;max-width:96%}
+.signal-line.secondary-rank{padding:17px 18px}
+.signal-line.secondary-rank strong{font-size:19px}
+.signal-line.secondary-rank small{font-size:15px;line-height:1.45;color:#c9d3c5;margin-top:5px}
+.signal-line.secondary-rank .rank{font-size:12px;letter-spacing:.045em}
+.signal-line.primary .rank{font-size:13px;letter-spacing:.04em}
+.diagnosis-panel p{font-size:16px;line-height:1.65;max-width:70ch}
+#actions h2{font-size:clamp(31px,5vw,48px);line-height:1.1;max-width:600px}
+#actions .lead{font-size:18px}
+#actions .two-step{gap:15px;margin-top:24px}
+#actions .step-card.numbered-action{display:grid;grid-template-columns:62px minmax(0,1fr);align-items:center;gap:15px;padding:22px 23px;border:1px solid #8b795f;background:linear-gradient(115deg,#383026,#282b26);}
+#actions .numbered-action .step-index{color:#edbd83;font-size:32px;font-weight:900;letter-spacing:-.06em;line-height:1}
+#actions .numbered-action h3{color:#f5eee2;font-size:clamp(19px,2.9vw,23px);line-height:1.32;margin:0;font-weight:760}
+@media(max-width:640px){.signal-line.secondary-rank small{font-size:15px}#actions .step-card.numbered-action{grid-template-columns:46px 1fr;padding:18px 16px;gap:12px}#actions .numbered-action .step-index{font-size:27px}#actions .numbered-action h3{font-size:19px}}
+#final .final-dm-instruction{display:block;max-width:100%;margin:14px 0 18px;padding:0;border:0;background:transparent;letter-spacing:normal}
+#final .message{width:100%;box-sizing:border-box}
+@media(max-width:520px){#final .final-dm-instruction{font-size:17px;line-height:1.5}}
+.restart-callout{margin:21px 0 16px;padding:23px 25px;border:1px solid #c38d58;border-left:5px solid #e5a866;border-radius:13px;background:linear-gradient(115deg,#413023,#292724 75%);box-shadow:0 8px 28px rgba(221,153,83,.11)}
+.restart-tag{display:block;color:#f1ba80;font-size:11px;font-weight:850;letter-spacing:.14em;margin-bottom:9px}
+.restart-callout h3{color:#fff1dc;margin:0 0 10px;font-size:clamp(22px,3.4vw,28px);line-height:1.22}
+.restart-callout p{font-size:16px;color:#e0d5c7;line-height:1.62;margin:0}
+.next-insight{padding:18px 20px;border-left:4px solid #dca66f;background:#342b23;color:#ebdbc7;border-radius:0 10px 10px 0;margin:20px 0;line-height:1.6}
+@media(max-width:600px){.restart-callout{padding:19px 17px}}
+</style></head><body><main class="shell">
+<header class="top"><span class="brand">Jake Parker Coaching</span><span class="counter" id="counter">01 / 06</span></header><div class="bar"><div id="barFill" style="width:16%"></div></div>
+<section id="intro" class="page active"><p class="kicker">The Physique Plateau Diagnostic</p><h1>You've tried getting leaner. So what's keeping you stuck?</h1><p class="lead">Maybe you’ve tried eating better, cutting calories, or switching workouts. You make some progress, then get stuck. Let’s figure out what keeps happening.</p><!-- PERSONAL_VIDEO_START -->
+<div class="personal-intro"><div class="personal-intro-label">A quick introduction from Jake</div><div class="personal-intro-embed"><iframe src="https://www.youtube.com/embed/maivJMjz4a0" title="Physique Plateau Diagnostic welcome video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><div class="personal-intro-footer">You’ve tried changing your training or food, but you’re still not where you want to be. We’ll look at what you’ve tried and where I’d start fixing it.</div></div>
+<!-- PERSONAL_VIDEO_END --><div class="hero-mark"><span><strong>01 · YOUR EXPERIENCE</strong><br>What you've tried</span><span><strong>02 · YOUR GAP</strong><br>What keeps getting in the way</span><span><strong>03 · NEXT STEP</strong><br>What I’d change first</span></div><div class="buttons"><button class="btn" onclick="go(1)">What's keeping me stuck? →</button></div></section>
+<section id="reframe" class="page"><p class="kicker">The problem with more effort</p><h2>Getting lighter isn't always the same as getting leaner.</h2><p class="lead">If your food intake has no clear structure, your workouts aren't building muscle, or your plan keeps falling apart, pushing harder at the same approach may not help.</p><div class="insight-list"><div class="insight"><b>Eating without clear targets</b><p>Eating healthy is good, but you still need to know how much you’re eating and what you’re aiming for.</p></div><div class="insight"><b>Working out without progression</b><p>Completing workouts doesn't automatically mean you're challenging your muscles in a way you can measure.</p></div><div class="insight"><b>Starting over every few weeks</b><p>If you keep resetting after a few days, you never really find out if the plan works.</p></div></div><div class="quote">Before changing everything again, let’s look at what’s actually going wrong.</div><div class="buttons"><button class="btn secondary" onclick="go(0)">← Back</button><button class="btn" onclick="go(2)">Find my biggest gap →</button></div></section>
+<section id="question" class="page"><p class="kicker" id="questionCount"></p><h2 id="questionTitle"></h2><p class="lead" id="questionHint"></p><div class="options" id="options"></div><div class="buttons"><button class="btn secondary" onclick="previousQuestion()">← Back</button><button class="btn" id="questionNext" onclick="nextQuestion()" disabled>Next →</button></div></section>
+<section id="diagnosis" class="page"><p class="kicker">Your plateau diagnosis</p><h2>Here's where I'd look first.</h2><p class="lead">You may have more than one thing holding you back. Look at your training and nutrition together, not as completely separate problems.</p><div class="diagnostic-stage"><div><div class="orbit-box" id="orbitBox"></div><p class="orbit-focus-badge">Your main area is highlighted</p><p class="orbit-note">Tap another section to see its details</p></div><div class="signal-column" id="signalColumn"></div></div><div class="diagnosis-panel" aria-live="polite"><div class="tag" id="focusTag"></div><h3 id="focusTitle"></h3><p id="focusSummary"></p></div><div id="cycleSignal"></div><p class="fine">This is a starting point from your answers. I’d need to see your actual training and nutrition to know for sure.</p><div class="buttons"><button class="btn secondary" onclick="go(2)">← Back</button><button class="btn" onclick="go(4)">See what to do next →</button></div></section>
+<section id="actions" class="page"><p class="kicker">Your next move</p><h2>Here are your three next steps.</h2><p class="lead">Start with these before changing everything again.</p><div class="two-step" id="steps"></div><div class="buttons"><button class="btn secondary" onclick="go(3)">← Back</button><button class="btn" onclick="go(5)">See my summary →</button></div></section>
+<section id="final" class="page"><p class="kicker">Your starting point</p><h2>Now you know where I’d start.</h2><p id="whyItsHard" class="next-insight"></p><p class="lead final-dm-instruction">Does everything make sense? Copy your result and send it to my Instagram DMs if you want to talk through what keeps happening.</p><div id="dmMessage" class="message"></div><div class="buttons"><button class="btn" onclick="copyResult()">Copy my result</button><button class="btn secondary" onclick="openInstagram()">Open Instagram DM ↗</button></div><div id="feedback" class="feedback" aria-live="polite"></div><p class="fine">On your phone, copy your result first, then open Instagram and paste it into our chat.</p><div class="buttons"><button class="btn secondary" onclick="go(4)">← Back</button><button class="btn secondary" onclick="restart()">Start over</button></div></section>
+<footer class="footer">Jake Parker Coaching · Educational self-assessment</footer></main><script>
+const INSTAGRAM_URL='https://ig.me/m/jakeparkercoaching';
+const qs=[
+{id:'goal',title:'What are you trying to change most right now?',hint:'Pick the goal that matters most to you.',choices:['Lose body fat and look leaner','Build muscle so I look like I lift','Lose fat while building muscle','I’m not completely sure']},
+{id:'outcome',title:'What has actually happened when you’ve tried?',hint:'Think about your recent attempts, not just your last week.',choices:['Not much has changed, even when I try','I’ve lost weight, but still look softer than I want','I make progress for a bit, then end up back where I started','I’m not sure if anything is working']},
+{id:'foodPlan',title:'How do you decide what and how much to eat?',hint:'Choose what sounds most like your approach.',choices:['I mostly try to eat healthy','I picked a calorie number or follow strict food rules','I track calories or macros, but I don’t know if my targets make sense','I understand my targets and use my progress to adjust']},
+{id:'stick',title:'What happens when you try to follow your plan?',hint:'Think about training and eating together, not just one perfect week.',choices:['I do well for 3–4 days, then fall off','I manage a few weeks, then lose momentum','I’m consistent until my schedule changes or life gets busy','I usually stick to it, but I’m still not seeing the results I want']},
+{id:'training',title:'What best describes your workouts?',hint:'Think about how you normally train.',choices:['I get to the gym and do whatever workout sounds good','I follow workouts I find online and change them fairly often','I have a plan, but I’m not sure it’s actually helping me build muscle','I follow a repeatable lifting plan and track my progress']},
+{id:'judge',title:'How do you judge if your training is working?',hint:'What do you look at after a few weeks?',choices:['I honestly don’t know','I judge by soreness, sweat or how hard it felt','Mostly how I look, feel, or what the scale says','I compare my lifts and other progress over time']},
+{id:'change',title:'What do you usually change when progress slows?',hint:'Choose your first reaction.',choices:['I eat less','I add more cardio','I switch workouts or start over','I don’t really know what to change','I stick with my plan and review progress first']},
+{id:'frustration',title:'What frustrates you most about where you are?',hint:'This helps put your results in context.',choices:['Feeling like I keep starting over','Putting in effort but not looking like it','Not knowing which nutrition or training advice to follow','Feeling like I should be further along by now']}
+];
+const labels={nutrition:'Nutrition',training:'Training',structure:'Structure'};
+let answers={},qi=0,page=0,report=null,active='nutrition';
+const q=id=>qs.find(x=>x.id===id);
+function esc(x){return String(x).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function go(n){if(n===3){if(Object.keys(answers).length!==qs.length)return;report=diagnose();active=report.primary;renderDiagnosis();}if(n===4){if(!report)return;renderActions();}if(n===5){if(!report)return;renderFinal();}page=n;document.querySelectorAll('.page').forEach((e,i)=>e.classList.toggle('active',i===n));if(n===2)renderQuestion();let p=n===2?(2+(qi+1)/qs.length)/6:(n+1)/6;document.getElementById('barFill').style.width=(p*100)+'%';document.getElementById('counter').textContent=n===2?`QUESTION ${qi+1} / ${qs.length}`:`${String(n+1).padStart(2,'0')} / 06`;window.scrollTo({top:0,behavior:'instant'});}
+function renderQuestion(){let o=qs[qi];document.getElementById('questionCount').textContent=`Question ${qi+1} of ${qs.length}`;document.getElementById('questionTitle').textContent=o.title;document.getElementById('questionHint').textContent=o.hint;document.getElementById('options').innerHTML=o.choices.map((v,i)=>`<button class="opt ${answers[o.id]===i?'selected':''}" type="button" aria-pressed="${answers[o.id]===i}" onclick="choose(${i})"><span class="dot"></span><span>${esc(v)}</span></button>`).join('');document.getElementById('questionNext').disabled=answers[o.id]===undefined;document.getElementById('questionNext').textContent=qi===qs.length-1?'See my results →':'Next →';}
+function choose(i){answers[qs[qi].id]=i;report=null;renderQuestion();}
+function nextQuestion(){if(answers[qs[qi].id]===undefined)return;if(qi===qs.length-1)go(3);else{qi++;go(2);}}
+function previousQuestion(){if(qi===0)go(1);else{qi--;go(2);}}
+function diagnose(){
+ const a=answers;
+ const restrictiveCycle=a.foodPlan===1&&a.stick<=1;
+ const macroConfusion=a.foodPlan===2&&a.stick<=1;
+ const unstructuredLifting=a.training<=1;
+ const softAfterLoss=a.outcome===1&&a.training<=2;
+ const scores={
+  nutrition:[2,2,2,0][a.foodPlan]+(restrictiveCycle?5:0)+(macroConfusion?2:0)+(a.foodPlan===0&&a.outcome===0?2:0)+(a.change===0?1:0),
+  training:[3,2,1,0][a.training]+[2,2,1,0][a.judge]+(softAfterLoss?4:0)+(a.goal===1&&a.training<=2?1:0)+(a.goal===2&&softAfterLoss?1:0)+(a.change===1&&unstructuredLifting?1:0),
+  structure:[3,2,2,0][a.stick]+(a.outcome===2?2:0)+(a.change===2?2:0)
+ };
+ const evidence={nutrition:restrictiveCycle?10:macroConfusion?6:a.foodPlan===0?3:0,
+  training:softAfterLoss?9:unstructuredLifting?6:a.judge<=1?4:0,
+  structure:a.stick===0?7:a.stick===1?5:a.stick===2?3:0};
+ const ids=['nutrition','training','structure'];
+ const ranked=ids.slice().sort((x,y)=>scores[y]-scores[x]||evidence[y]-evidence[x]||ids.indexOf(x)-ids.indexOf(y));
+ const peak=Math.max(...Object.values(scores));
+ // Having a bigger nutrition issue doesn't make an actionable lifting issue disappear.
+ const trainingNeedsWork=a.training<=2||a.judge<=2;
+ const nutritionNeedsWork=a.foodPlan<=2;
+ const dualFocus=trainingNeedsWork&&nutritionNeedsWork&&scores.training>=2&&scores.nutrition>=2;
+ return {scores,evidence,ranked,primary:ranked[0],tie:peak>0&&scores[ranked[0]]===scores[ranked[1]],allClear:peak===0,restrictiveCycle,softAfterLoss,dualFocus,trainingNeedsWork,nutritionNeedsWork};
+}
+function goalContext(){
+ const a=answers;
+ if(a.goal===3)return 'If you are not sure what physique change matters most, start by clarifying your goal and looking at what your current approach is producing.';
+ if(a.goal===0)return a.outcome===1
+  ? 'You want to look leaner and have already lost weight. The next step may involve more than making the scale go lower.'
+  : 'For your fat-loss goal, review your usual food intake and weight trend before cutting calories more aggressively.';
+ if(a.goal===1)return 'Because you want to look more muscular, pay attention to how your lifting progresses instead of only changing what you eat.';
+ return a.outcome===1
+  ? 'You want to lose fat while building muscle, and have already lost weight. Look at lifting progress and physique changes alongside scale weight.'
+  : 'For your goal of losing fat while building muscle, use training performance and physique trends alongside the scale to evaluate progress.';
+}
+function frustrationContext(){
+ return [
+ 'You mentioned being tired of starting over. That makes it worth finding a plan you can continue after an imperfect day.',
+ 'You said you are putting in effort without looking like it. That is why it helps to separate gym attendance from actual lifting progress.',
+ 'You are unsure which advice to trust. Rather than copying another online target, use your own consistent habits and results as feedback.',
+ 'You feel like you should be further along. Instead of reacting by changing everything, look at the trends over enough consistent weeks.'
+ ][answers.frustration] || '';
+}
+function combinedContext(){
+ const a=answers,r=report;
+ if(r.restrictiveCycle&&r.scores.training>=3)return 'The food plan is hard to stick with, and you are also unsure if your lifting is building muscle. Both need attention.';
+ if(r.softAfterLoss&&r.scores.nutrition>=3)return 'You have already lost weight but still want a more muscular look. Your training and nutrition may both need attention; another calorie cut alone may miss the point.';
+ if(r.primary==='structure'&&a.training<=1)return 'Changing workouts and losing momentum can reinforce each other. A smaller, repeatable set of exercises can make the plan easier to follow.';
+ if(r.primary==='training'&&a.change===1)return 'Adding cardio when progress slows may increase activity, but it does not replace progressive lifting for building muscle.';
+ if(r.primary==='nutrition'&&a.foodPlan===0)return 'Choosing healthy foods matters, but it does not tell you how much you eat. Understanding your usual intake is the first step.';
+ if(r.tie)return 'More than one area showed similar concern. This is a practical place to begin, not a certain explanation for your plateau.';
+ return '';
+}
+function diagnosisFor(cat){let a=answers;
+if(cat==='nutrition'){
+ if(a.foodPlan===0)return {title:'Eating healthy without a clear structure',what:'You’re trying to eat healthy, which is good. But you don’t really know how much you’re eating.',why:'Eating good foods doesn’t tell us if you’re getting enough protein or if your total intake is right for getting leaner. We’d still be guessing.',focus:'Learn what your normal intake looks like before cutting more food.',steps:['Record a few ordinary days of eating without trying to make them perfect.','Notice your meal pattern, portions and sources of protein.','Compare that baseline with changes in your weight and training before setting new targets.']};
+ if(a.foodPlan===1&&a.stick<=1)return {title:'Cutting calories without a plan you can sustain',what:`You’ve chosen a low-calorie or strict approach, and ${a.stick===0?'it tends to break down after a few days':'it becomes hard to follow after a few weeks'}.`,why:'A calorie target picked without enough context may be too difficult to sustain. If you repeatedly fall off, you can’t evaluate whether the approach is helping.',focus:'Build a repeatable eating pattern before making another aggressive cut.',steps:['Look at where your current calorie target came from.','Identify what changes when you fall off: hunger, social events, portions or lack of meal structure.','Establish a realistic baseline and repeatable meals before adjusting the numbers.']};
+ if(a.foodPlan===2)return {title:'Tracking numbers without knowing what they mean',what:'You’re tracking calories or macros, but you’re not sure where those numbers came from or if they make sense for you.',why:'You can hit a number every day and still be aiming at the wrong number. We need to know what your intake is doing for you.',focus:'Give your tracking a purpose.',steps:['Review how your calorie and protein targets were chosen.','Look at your actual intake across a normal week, not one ideal day.','Use your weight and performance trends to decide what should change.']};
+ return {title:'Nutrition that needs a clearer direction',what:a.foodPlan===1?'You’re relying on a chosen calorie number or food rules.':'You have a nutrition approach, but there may still be a gap between the plan and your results.',why:'Your eating approach needs to be repeatable and connected to your physique goal, rather than changed in response to every difficult week.',focus:'Review the pattern before changing the target.',steps:['Look at what you eat across an ordinary week.','Compare it with weight trends and your lifting.','Change one thing at a time only after you have enough consistent information.']};
+}
+if(cat==='training'){
+ if(a.outcome===1&&a.training<=2)return {title:'Losing weight without building the muscle you want',what:'You’ve lost weight, but still don’t look as lean or muscular as you expected. Your lifting might be part of the reason. Losing weight won’t build the muscle you want to see underneath.',why:'Getting lighter alone doesn’t build muscle. If your training isn’t providing a repeatable challenge, the scale can move without producing the look you want.',focus:'Make muscle-building training a priority alongside nutrition.',steps:['Follow a repeatable lifting plan rather than changing workouts constantly.','Keep track of weights and reps to see if performance is improving.','Use gym progress and physique changes alongside scale weight to judge results.']};
+ if(a.training<=1)return {title:'Working out, but not training',what:a.training===0?'You’re showing up and doing exercises, but choosing them as you go.':'You’re following workouts, but changing them often.',why:'Getting sweaty or tired doesn’t tell us if you’re building muscle. If the exercises keep changing and you don’t log your lifts, what are we actually comparing?',focus:'Turn your workouts into a routine you can track.',steps:['Choose a manageable number of lifting days.','Keep your main exercises consistent long enough to evaluate them.','Write down weights and reps to see whether you’re getting stronger.']};
+ if(a.judge<=2)return {title:'Training without a clear measure of progress',what:'You have some structure, but you’re judging progress mostly by feel, soreness, or appearance.',why:'A workout can feel hard and still leave you guessing. I’d rather see what you lifted last week and if you actually improved.',focus:'Track what you’re actually improving in the gym.',steps:['Record your main exercises, weights and reps.','Keep your sets challenging with controlled technique.','Compare performance over several weeks before changing the plan.']};
+ return {title:'Review how your lifting supports the goal',what:'You report a consistent plan and tracking, which is a good starting point.',why:'If you’re still not getting the physique you want, your training and nutrition may need a more specific review together.',focus:'Keep the foundation and review the full approach.',steps:['Look at progress across several weeks.','Check that training, food intake and recovery support the same goal.','Avoid changing everything at once.']};
+}
+if(a.stick===0)return {title:'The three-day reset cycle',what:'You feel on track for three or four days, then the plan starts falling apart.',why:'Repeated fresh starts make it hard to gather enough consistent weeks to judge progress. The issue may be your schedule, food rules, or how much you’re trying to change at once, not simply motivation.',focus:'Build a version of the plan you can follow on ordinary days.',steps:['Look at what usually changes around day three or four.','Choose a smaller set of training and food habits you can repeat.','Return to the plan after a missed day rather than restarting everything.']};
+if(a.stick===1)return {title:'Starting strong, then losing momentum',what:'You can follow a plan for a few weeks, but struggle to keep it going.',why:'If the approach needs a perfect few weeks to work, it may not fit your life well enough to maintain or evaluate.',focus:'Build structure for the weeks that aren’t perfect.',steps:['Identify what usually changes before you stop.','Set a realistic training minimum and a few repeatable meals.','Keep the same basic approach long enough to look at progress.']};
+if(a.stick===2)return {title:'A plan that doesn’t survive busy weeks',what:'Your plan works on the easy weeks. When life gets busy, it falls apart.',why:'You need something that still works when the week isn’t perfect. Otherwise, you’re starting over every time your schedule changes.',focus:'Build a backup version of your normal week.',steps:['Identify the days you can realistically lift during a busy week.','Choose basic food habits you can still follow when plans change.','Pick up from the next session instead of waiting for a perfect Monday.']};
+return {title:'Keep the routine and review what works',what:'You report staying fairly consistent, which means starting over is not necessarily the answer.',why:'A repeatable routine gives you useful information. The next step is seeing if the training and nutrition are producing the changes you want.',focus:'Review trends before changing your plan.',steps:['Compare your gym performance and body changes over several weeks.','Identify what is progressing and what is not.','Adjust one thing at a time instead of changing the whole plan.']};}
+function polar(cx,cy,r,deg){let t=deg*Math.PI/180;return [cx+r*Math.cos(t),cy+r*Math.sin(t)];}
+function arcPath(start,end,outer=151){let a=polar(200,200,outer,start),b=polar(200,200,outer,end),c=polar(200,200,79,end),d=polar(200,200,79,start);return `M ${a} A ${outer} ${outer} 0 0 1 ${b} L ${c} A 79 79 0 0 0 ${d} Z`;}
+function restartPattern(){
+ const a=answers;
+ if(a.stick===0)return {heading:'The restart every few days is part of the plateau',detail:'You said things go well for three or four days before the plan falls apart. Each reset makes it harder to learn what works over several consistent weeks. The question is what keeps making the plan break down, and what would let you continue after an imperfect day.'};
+ if(a.stick===1)return {heading:'A few good weeks keep turning into another restart',detail:'You can build momentum, but then it fades. The hard part is not proving you can follow a plan for a week or two. It is finding an approach you can keep following long enough to measure the result, including the weeks that are not ideal.'};
+ if(a.stick===2)return {heading:'Your routine keeps breaking when life changes',detail:'When your schedule changes, your plan stops working. If each busy week sends you back to square one, you never get a long enough run of consistent training and nutrition to know which part needs adjusting.'};
+ if(a.outcome===2)return {heading:'Progress followed by a reset is still a pattern',detail:'You said you make progress, then find yourself back where you started. That is worth examining even if you usually follow your plan. We need to know what changes after those good weeks, not simply repeat the same starting plan.'};
+ return null;
+}
+function renderDiagnosis(){
+ const sectors=[{k:'nutrition',start:-150,end:-34,angle:-92},{k:'training',start:-30,end:86,angle:28},{k:'structure',start:90,end:206,angle:148}],r=report;
+ const scores=r.scores;const peak=Math.max(1,...Object.values(scores));
+ let inner=`<svg viewBox="0 0 400 400" aria-label="Interactive diagnostic showing relative gaps and highlighting the recommended first focus" role="img"><defs><linearGradient id="activeFill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9e5732"/><stop offset=".50" stop-color="#eba96d"/><stop offset="1" stop-color="#b97246"/></linearGradient><linearGradient id="quietFill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4f654f"/><stop offset="1" stop-color="#2e392f"/></linearGradient></defs><circle cx="200" cy="200" r="162" stroke="#64735a" stroke-opacity=".3" fill="none"/>`;
+ for(const x of sectors){
+  const is=!r.allClear&&x.k===r.primary;
+  // The radius reflects relative concern within this person's answers, not a measured percentage.
+  const outer=r.allClear?136:99+58*(scores[x.k]/peak);
+  const labelRadius=(79+outer)/2;
+  const p=polar(200,200,labelRadius,x.angle);
+  inner+=`<g class="sector ${is?'is-primary':'is-secondary'} ${x.k===active&&!is?'is-inspected':''}" tabindex="0" role="button" aria-label="View ${labels[x.k]} result" onclick="setActive('${x.k}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setActive('${x.k}');}"><path d="${arcPath(x.start,x.end,outer)}" fill="${is?'url(#activeFill)':'url(#quietFill)'}" stroke="${is?'#ffcf9f':'#617460'}" stroke-width="${is?3.6:1.5}"/><text x="${p[0]}" y="${p[1]}" dominant-baseline="middle" text-anchor="middle" fill="${is?'#24180e':'#e6e9de'}" font-weight="800" font-size="${x.k==='structure'?13:15}">${labels[x.k].toUpperCase()}</text></g>`;
+ }
+ inner+=`<circle class="${r.allClear?'':'halo'}" cx="200" cy="200" r="67" fill="#1d271f" stroke="${r.allClear?'#708670':'#bc9a71'}" stroke-width="2"/><text x="200" y="191" fill="#eaece6" text-anchor="middle" font-size="12" font-weight="800">YOUR</text><text x="200" y="209" fill="#eaece6" text-anchor="middle" font-size="14" font-weight="800">PLATEAU</text><g class="${r.allClear?'':'orbit-sweep'}"><circle cx="200" cy="45" r="5" fill="${r.allClear?'#9aaf91':'#f4d9ad'}"/><circle cx="200" cy="45" r="13" fill="${r.allClear?'#809a75':'#d78c53'}" opacity=".17"/></g></svg>`;
+ document.getElementById('orbitBox').innerHTML=inner;
+ document.getElementById('signalColumn').innerHTML=r.ranked.map((k,i)=>`<button class="signal-line ${!r.allClear&&i===0?'primary':'secondary-rank'} ${k===active?(r.allClear?'selected-neutral':'selected'):''}" type="button" onclick="setActive('${k}')"><span class="rank">${r.allClear?'NO CLEAR GAP':i===0?(r.dualFocus?'MAIN GAP':'START HERE'):r.dualFocus&&((r.primary==='nutrition'&&k==='training')||(r.primary==='training'&&k==='nutrition'))?'ALSO NEEDS ATTENTION':i===1?'ALSO WORTH REVIEWING':'LOWER PRIORITY RIGHT NOW'}</span><strong>${labels[k]}</strong><small>${esc(diagnosisFor(k).title)}</small></button>`).join('');
+ const d=diagnosisFor(active);
+ document.getElementById('focusTag').textContent=active===r.primary?(r.allClear?'No clear gap from your answers':r.dualFocus?'One of two areas to work on':'Your biggest gap · start here'):r.dualFocus&&((active==='nutrition'&&r.trainingNeedsWork)||(active==='training'&&r.nutritionNeedsWork))?'Also worth fixing':'Another area to consider';
+ document.getElementById('focusTitle').textContent=r.allClear&&active===r.primary?'Your foundations look reasonably consistent':d.title;
+ // Keep the diagnosis short. Their goal and frustration still inform the headline and next-step advice.
+ const explanation=r.allClear&&active===r.primary
+ ? 'From what you told me, the basics look fairly consistent. I would review what your actual workouts and nutrition are producing before changing everything.'
+ : d.what+' '+d.why;
+ document.getElementById('focusSummary').textContent=explanation+(r.dualFocus&&active===r.primary?' '+(r.primary==='nutrition'?'Your lifting also needs work. Fixing the food plan alone won’t solve that.':'Your food approach also needs work. Changing workouts alone won’t solve that.'):'');
+
+ const cycle=restartPattern();
+ document.getElementById('cycleSignal').innerHTML=cycle?`<aside class="restart-callout" aria-label="Your repeat pattern"><span class="restart-tag">THE PATTERN WORTH ADDRESSING</span><h3>${esc(cycle.heading)}</h3><p>${esc(cycle.detail)}</p></aside>`:'';
+}
+function setActive(x){active=x;renderDiagnosis();}
+function threeSteps(items){
+ return items.map((item,i)=>`<article class="step-card numbered-action"><div class="step-index">${String(i+1).padStart(2,'0')}</div><h3>${esc(item)}</h3></article>`).join('');
+}
+function actionPlan(){
+ const a=answers,r=report;
+ if(r.allClear)return ['Compare your lifts and physique changes over the last few weeks.','Check that your food intake and training are actually moving you toward your goal.','Change one thing at a time based on what the results show.'];
+ const nutrition=diagnosisFor('nutrition');
+ const training=diagnosisFor('training');
+ const structure=diagnosisFor('structure');
+ // For two real gaps, include a meaningful action from each, even when one score is much higher.
+ if(r.dualFocus){
+  const liftAction=a.training<=1?'Pick a repeatable lifting plan and keep your main exercises the same for several weeks.':a.training===2?'Review your lifting plan. Make sure it covers major muscle groups and gives you a way to progress.':'Keep your lifting plan, but start judging it by weights and reps, not soreness or how tired you feel.';
+  const trackAction=a.judge<=2?'Log the weights and reps of your main lifts each week so you can tell if you are improving.':'Keep tracking your lifts and review the trend before changing the plan.';
+  const nutritionAction=a.foodPlan===1&&a.stick<=1?'Stop bouncing between strict food rules and falling off. Track a normal week of eating to find a target you can actually follow.':a.foodPlan===0?'Track what you eat for a normal week. See how much protein, carbs, fats and total food you are actually getting.':'Review your current calorie and macro targets against your intake and progress, instead of following numbers you picked at random.';
+  if(r.primary==='nutrition')return [nutritionAction,liftAction,trackAction];
+  if(r.primary==='structure')return [structure.steps[0],liftAction,nutritionAction];
+  return [liftAction,trackAction,nutritionAction];
+ }
+ if(r.primary==='training')return [training.steps[0],training.steps[1],training.steps[2]];
+ if(r.primary==='nutrition')return [nutrition.steps[0],nutrition.steps[1],nutrition.steps[2]];
+ return [structure.steps[0],structure.steps[1],structure.steps[2]];
+}
+function renderActions(){
+ document.getElementById('steps').innerHTML=threeSteps(actionPlan());
+ document.querySelector('#actions .lead').textContent=report.dualFocus?'Your training and nutrition both need attention. Here is where I would start.':'Start with these before changing everything again.';
+}
+function messageText(){
+ const cycle=restartPattern();
+ const main=report.allClear?'My result: No obvious foundational gap.':report.dualFocus?`My main gaps: ${diagnosisFor('nutrition').title}; ${diagnosisFor('training').title}.`:`My biggest gap: ${diagnosisFor(report.primary).title}.`;
+ return main+(cycle?`\nThe pattern I keep running into: ${cycle.heading}.`:'\nI need to check what my current plan is actually producing before changing it.');
+}
+function renderFinal(){const cycle=restartPattern();document.getElementById('whyItsHard').textContent=cycle?'You have already shown you can start. The missing piece is understanding why the approach keeps breaking and building one you can return to without another full reset. A new calorie target or workout alone will not answer that.':report.allClear?'You report solid habits, but we still need to check what your actual training and nutrition have produced. More changes without that information would be another guess.':report.primary==='training'?'You have tried putting in the work, but you have not had a consistent way to tell if the lifting is building muscle. Changing exercises again will not give you that feedback.':report.primary==='nutrition'?'Changing calorie numbers only helps when you know what your normal intake is doing and can keep the approach going. That is the piece to work through.':'The problem is not knowing one more fitness tip. It is building a plan that still works when your week changes and gives you enough feedback to adjust it.';document.getElementById('dmMessage').textContent=messageText();}
+async function copyResult(){try{await navigator.clipboard.writeText(messageText());document.getElementById('feedback').textContent='Copied. Paste this into your Instagram chat.';}catch(e){let t=document.createElement('textarea');t.value=messageText();document.body.appendChild(t);t.select();try{document.execCommand('copy');document.getElementById('feedback').textContent='Copied. Paste this into your Instagram chat.';}catch(_){document.getElementById('feedback').textContent='Select and copy the message above.';}t.remove();}}
+function openInstagram(){window.open(INSTAGRAM_URL,'_blank','noopener,noreferrer');}
+function restart(){answers={};qi=0;page=0;report=null;document.getElementById('feedback').textContent='';go(0);}
+</script></body></html>
